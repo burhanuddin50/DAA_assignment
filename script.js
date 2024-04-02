@@ -176,7 +176,10 @@ async function jarvis(speed)
 markpoint(points[leftmostpoint],"red");
 desc.innerText="Completed forming the convex hull. All points on the hull are marked in red, with the hull boundary outlined in blue";
 }
+desc.innerText = "Initializing Kirkpatrick–Seidel Algorithm. Starting process to find the convex hull.";
+
 async function bridge(points1, vertical_line,speed) {
+  desc.innerText = "Finding bridges within subsets of points. Bridges are indicated with lines.";
   let points=[...points1];
   let candidates = [];
   if (points.length === 2) {
@@ -267,6 +270,7 @@ async function bridge(points1, vertical_line,speed) {
 }
 function flippedy(points)
 {
+  desc.innerText = "Preparing points for upper hull computation. Points are flipped over the X-axis for processing.";
   let fp=[];
   for(let i=0; i<points.length; i++)
   {
@@ -278,6 +282,7 @@ function flippedy(points)
 }
 async function connect(lower ,upper ,points,speed)
 {
+  desc.innerText = "Connecting points to form a segment of the convex hull. Segments are being drawn.";
   let npoints= points.filter( p=> p.x>=lower.x && p.x <=upper.x);
   let nnpoints=await eliminatebelow(lower, upper, npoints);
   let n=nnpoints.length;
@@ -346,6 +351,7 @@ function isBelowLine(point, upperPoint, lowerPoint) {
   return point.y < lineY;
 }
 function eliminatebelow(lowerPoint , upperPoint, points) {
+  desc.innerText = "Eliminating points below the current line segment. Points not part of the segment are being removed from consideration.";
   return points.filter(point => !isBelowLine(point, upperPoint, lowerPoint));
 }
 async function upperhull(points,speed)
@@ -391,10 +397,14 @@ async function kps(speed)
     //   {x: 473, y: 226},
     //   {x: 545, y: 311}]; 
     let npoints=flippedy(points);
+    desc.innerText = "Computing the upper hull. Dividing points and recursively finding upper bridges.";
+    desc.innerText = "Points being considered are highlighted.";
     let upper=await upperhull(npoints,speed);
+    desc.innerText = "Computing the lower hull by re-flipping the points. Considering points for the lower hull.";
     let lower=flipped(await upperhull(flipped([...npoints]),speed));
+    desc.innerText = "Combining the results of the upper and lower hull to form the complete convex hull.";
     let answer =await upper.concat(lower); 
-    desc.innerText="Finished";
+    desc.innerText="Finished, hull is outlined, with key points marked.";
     // for(let i=0; i<answer.length; i++)
     // markpoint(answer[i],"red");
 }
