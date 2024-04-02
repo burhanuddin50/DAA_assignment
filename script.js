@@ -9,6 +9,7 @@ var points=[];
       var dot = createDot(event.offsetX, event.offsetY);
       visualizationContainer.appendChild(dot);
     }); 
+    desc.innerText="Click on the visualization area to plot points, set execution speed, and select an algorithm (Jarvis March or Kirkpatrick–Seidel) before clicking 'Execute'.";
     function createDot(x, y) {
       var dot = document.createElement('div');
       dot.className = 'dot';
@@ -114,18 +115,20 @@ async function jarvis(speed)
   }
   var leftmostpoint=findLeftmostPoint(points);
   markpoint(points[leftmostpoint],"red");
-  desc.innerText="Step1";
+  desc.innerText="Locating the leftmost point to start forming the convex hull, marked RED";
   await sleep(speed);
   let hull=[];
   let p=leftmostpoint,q;
   do {
     hull.push(points[p]);
     markpoint(points[p],"red");
+    desc.innerText="Examining points to construct the convex hull. The current point on the hull is RED, the next potential point is GREEN, and the line being considered is BLUE.";
     await sleep(speed);
     q = (p + 1) % n;
     markpoint(points[q],"green");
     connectDots(points[p],points[q],"blue");
     await sleep(speed);
+    desc.innerText="Comparing angles to find the next point in the convex hull. Temporary lines are drawn in yellow to evaluate each point.";
     for (let i = 0; i < n; i++) {
       //  if(hull.includes(points[i]))
       //  continue;
@@ -160,7 +163,7 @@ async function jarvis(speed)
     p = q;
 } while (p !== leftmostpoint);
 markpoint(points[leftmostpoint],"red");
-desc.innerText="Completed";
+desc.innerText="Completed forming the convex hull. All points on the hull are marked in red, with the hull boundary outlined in blue";
 }
 async function bridge(points1, vertical_line) {
   let points=[...points1];
