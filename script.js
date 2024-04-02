@@ -162,7 +162,7 @@ async function jarvis(speed)
 markpoint(points[leftmostpoint],"red");
 desc.innerText="Completed";
 }
-async function bridge(points1, vertical_line) {
+async function bridge(points1, vertical_line,speed) {
   let points=[...points1];
   let candidates = [];
   if (points.length === 2) {
@@ -179,8 +179,8 @@ async function bridge(points1, vertical_line) {
       modify_s.splice(0,1);
       pairs.push([pi, pj].sort((a, b) => a.x - b.x));
   }
-  // for(let i=0; i<pairs.length; i++)
-  // connect(pairs[i][0],pairs[i][1],"violet");
+   for(let i=0; i<pairs.length; i++)
+   connectDots(pairs[i][0],pairs[i][1],"violet");
   if (modify_s.length === 1) {
       candidates.push(modify_s[0]);
       //markpoint(modify_s[0],"green");
@@ -195,7 +195,7 @@ async function bridge(points1, vertical_line) {
           slopes.push((pi.y - pj.y) / (pi.x - pj.x));
       }
   }
-  //await sleep(200);
+  await sleep(speed);
   let median_index = Math.floor(slopes.length / 2) - (slopes.length % 2 === 0 ? 1 : 0);
   let slopes_dup=[...slopes];
   slopes_dup.sort();
@@ -210,8 +210,8 @@ async function bridge(points1, vertical_line) {
   //markpoint(left,"yellow");
   //markpoint(right,"yellow");
  // await sleep(2000);
-  //for(let i=0; i<pairs.length; i++)
-  //disconnect(pairs[i][0],pairs[i][1],"violet");
+  for(let i=0; i<pairs.length; i++)
+  disconnect(pairs[i][0],pairs[i][1],"violet");
   if (left.x <= vertical_line && right.x > vertical_line) {
     // await sleep(200);
       //for(let i=0; i<candidates.length; i++)
@@ -243,10 +243,13 @@ async function bridge(points1, vertical_line) {
           //markpoint(pair[0],"green");
       }
   }
-  //await sleep(200);
-  //for(let i=0; i<candidates.length; i++)
-  //markpoint(candidates[i],"blue");
-  return bridge([...candidates], vertical_line);
+  for(let i=0; i<candidates.length; i++)
+  markpoint(candidates[i],"green");
+  await sleep(speed);
+  for(let i=0; i<candidates.length; i++)
+  markpoint(candidates[i],"blue");
+  await sleep(speed);
+  return await bridge([...candidates], vertical_line,speed);
 }
 function flippedy(points)
 {
@@ -259,7 +262,7 @@ function flippedy(points)
   }
   return fp;
 }
-async function connect(lower ,upper ,points)
+async function connect(lower ,upper ,points,speed)
 {
   let npoints= points.filter( p=> p.x>=lower.x && p.x <=upper.x);
   let nnpoints=await eliminatebelow(lower, upper, npoints);
@@ -269,7 +272,7 @@ async function connect(lower ,upper ,points)
   if(n!=2)
   {
   connectDots(lower,upper,"green");
-   await sleep(2000);
+   await sleep(speed);
   }
   for(let i=0; i<nnpoints.length; i++)
   {
@@ -278,23 +281,33 @@ async function connect(lower ,upper ,points)
   console.log(upper);
   if(n!=2)
   {
-   await sleep(2000);
+   await sleep(speed);
   disconnect(lower,upper,"green");
-  await sleep(2000);}
+  await sleep(speed);}
   nnpoints.sort((a, b) => a.x - b.x);
   let max_left=nnpoints[Math.floor(n/2)-1];
   let min_right=nnpoints[Math.floor(n/2)];
   if(n!=2){
   drawline((max_left.x + min_right.x)/2);
-  await sleep(2000);}
-  let ans=await bridge([...nnpoints],(max_left.x + min_right.x)/2); 
+  await sleep(speed);}
+  let ans=await bridge([...nnpoints],(max_left.x + min_right.x)/2,speed); 
   markpoint(ans[0],"red");
   markpoint(ans[1],"red");
   if(n!=2)
   {
-  await sleep(2000);
+  await sleep(speed);
   eraseline((max_left.x + min_right.x)/2);
-  await sleep(2000);
+  await sleep(speed);
+  if(ans[0]!=ans[1])
+  {connectDots(ans[0],lower,"green");
+  connectDots(ans[1],upper,"green");
+  connectDots(lower,upper,"green");
+  connectDots(ans[0],ans[1],"green");
+  await sleep(speed);
+  disconnect(ans[0],lower,"green");
+  disconnect(ans[1],upper,"green");
+  disconnect(lower,upper,"green");
+  disconnect(ans[0],ans[1],"green");}
   }
   let points_left=[ans[0]];
   let points_right=[ans[1]];
@@ -307,8 +320,8 @@ async function connect(lower ,upper ,points)
       unmarkpoint(nnpoints[i]);
   }
   if(n!=2)
-  await sleep(2000);
-  return (await connect(lower, ans[0], [...points_left])).concat(await connect(ans[1],upper, [...points_right]));
+  await sleep(speed);
+  return (await connect(lower, ans[0], [...points_left],speed)).concat(await connect(ans[1],upper, [...points_right],speed));
 }
 function isBelowLine(point, upperPoint, lowerPoint) {
   if(point==upperPoint || point== lowerPoint)
@@ -321,7 +334,7 @@ function isBelowLine(point, upperPoint, lowerPoint) {
 function eliminatebelow(lowerPoint , upperPoint, points) {
   return points.filter(point => !isBelowLine(point, upperPoint, lowerPoint));
 }
-async function upperhull(points)
+async function upperhull(points,speed)
 {
     let lower= points[0];
     for( let i=1; i<points.length; i++)
@@ -341,8 +354,8 @@ async function upperhull(points)
     }
     markpoint(lower,"red");
     markpoint(upper,"red");
-    await sleep(2000);
-    return connect(lower,upper,points);
+    await sleep(speed);
+    return connect(lower,upper,points,speed);
 }
 function flipped(points)
 {
@@ -364,8 +377,8 @@ async function kps(speed)
     //   {x: 473, y: 226},
     //   {x: 545, y: 311}]; 
     let npoints=flippedy(points);
-    let upper=await upperhull(npoints);
-    let lower=flipped(await upperhull(flipped([...npoints])));
+    let upper=await upperhull(npoints,speed);
+    let lower=flipped(await upperhull(flipped([...npoints]),speed));
     let answer =await upper.concat(lower); 
     desc.innerText="Finished";
     // for(let i=0; i<answer.length; i++)
