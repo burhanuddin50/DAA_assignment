@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Documentation - Convex Hull Visualization</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .function { margin-bottom: 20px; }  
+        .function-title { font-weight: bold; }
+        .description { margin-left: 20px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Code Documentation for Convex Hull Visualization</h1>
+<h2> Jarvis March</h2>
+In the Jarvis March method, every point on the hull entails an examination of all other points in the input to set to determine the next point. Due to this, the time complexity of this algorithm is O(nh), where n is the number of input points and h the number of points on the convex hull of the polygon. In a worst-case scenario, where n = h, the time complexity worsens to O(n2), i.e. when all the input points make up the hull.
+<h1></h1>
+    <!-- Function: sleep -->
+    <div class="function">
+        <div class="function-title">Function: sleep(ms)</div>
+        <div class="description">
+            <p><strong>Description:</strong> A utility function that creates a delay. Used for controlling visualization speed.</p>
+            <p><strong>Parameters:</strong> ms - Time in milliseconds.</p>
+        </div>
+    </div>
+
+    <!-- Function: createDot -->
+    <div class="function">
+        <div class="function-title">Function: createDot(x, y)</div>
+        <div class="description">
+            <p><strong>Description:</strong> Creates a dot on the visualization area at the clicked coordinates, representing a point in the convex hull algorithm.</p>
+            <p><strong>Parameters:</strong> x - X-coordinate of the click, y - Y-coordinate of the click.</p>
+        </div>
+    </div>
+
+    <!-- Function: findLeftmostPoint -->
+    <div class="function">
+        <div class="function-title">Function: findLeftmostPoint(pts)</div>
+        <div class="description">
+            <p><strong>Description:</strong> Determines the leftmost point from a set of points, used as the starting point for the Jarvis March algorithm.</p>
+            <p><strong>Parameters:</strong> pts - An array of point objects.</p>
+        </div>
+    </div>
+<!-- Function: markpoint -->
+<div class="function">
+    <div class="function-title">Function: markpoint(pts, color)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Changes the color of a given point to visually distinguish it during the algorithm's execution.</p>
+        <p><strong>Parameters:</strong> pts - The point to be marked, color - The color to mark the point with.</p>
+        <p><strong>Visualization:</strong> The point's visual dot changes to the color specified.</p>
+    </div>
+</div>
+
+<!-- Function: unmarkpoint -->
+<div class="function">
+    <div class="function-title">Function: unmarkpoint(pts)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Resets the color of a given point, usually when it is no longer a point of interest in the algorithm's process.</p>
+        <p><strong>Parameters:</strong> pts - The point whose color is to be reset.</p>
+        <p><strong>Visualization:</strong> The point's visual dot reverts to the default base color (black).</p>
+    </div>
+</div>
+
+<!-- Function: connectDots -->
+<div class="function">
+    <div class="function-title">Function: connectDots(pts1, pts2, color)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Draws a line between two points to represent the connection between them as part of the convex hull.</p>
+        <p><strong>Parameters:</strong> pts1 - The starting point, pts2 - The ending point, color - The color of the line.</p>
+        <p><strong>Visualization:</strong> A line is drawn on the screen between the two points in the specified color.</p>
+    </div>
+</div>
+
+<!-- Function: jarvis -->
+<div class="function">
+    <div class="function-title">Function: jarvis(speed)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Implements the Jarvis March algorithm, also known as the "Gift Wrapping" algorithm, to compute the convex hull of a set of points.</p>
+        <p><strong>Parameters:</strong> speed - The speed of the algorithm's execution, used to control the visualization delay.</p>
+        <p><strong>Visualization:</strong> Points and lines are dynamically colored to illustrate the step-by-step process of forming the convex hull.</p>
+    </div>
+</div>
+
+   
+<h2> Kirk-Patrick-Seidel</h2>
+
+The Kirk Patrick Seidel algorithm, like the Jarvis March, is both input and output dependent. Hence the complexity O(nlogh), where n is the number of input points and h the number of points on the convex hull of the two-dimensional polygon. Upper-Hull and Lower-Hull procedures take O(nlogh) time while both bridges take O(n) worst case time to compute.
+
+<!-- Function: flippedy -->
+<div class="function">
+    <div class="function-title">Function: flippedy(points)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Reflects all points over the X-axis to assist in computing the upper hull.</p>
+        <p><strong>Parameters:</strong> points - An array of point objects to be flipped.</p>
+    </div>
+</div>
+
+<!-- Function: bridge -->
+<div class="function">
+    <div class="function-title">Function: bridge(points1, vertical_line, speed)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Finds the bridge between sets of points divided by a vertical line. This is part of the divide and conquer strategy used in the KPS algorithm.</p>
+        <p><strong>Parameters:</strong> points1 - Array of point objects, vertical_line - X-coordinate of the dividing line, speed - Visualization delay in milliseconds.</p>
+        <p><strong>Visualization:</strong> Bridge points are connected with a violet line temporarily during the process.</p>
+    </div>
+</div>
+
+<!-- Function: connect -->
+<div class="function">
+    <div class="function-title">Function: connect(lower, upper, points, speed)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Recursively connects points to form the convex hull segment between two points.</p>
+        <p><strong>Parameters:</strong> lower - The lower point, upper - The upper point, points - Array of points within the segment, speed - Visualization delay.</p>
+        <p><strong>Visualization:</strong> Hull segments are drawn and colored as they are determined to be part of the hull.</p>
+    </div>
+</div>
+
+<!-- Function: eliminatebelow -->
+<div class="function">
+    <div class="function-title">Function: eliminatebelow(lowerPoint, upperPoint, points)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Removes points that are below the line formed by two points, which are not part of the convex hull segment being constructed.</p>
+        <p><strong>Parameters:</strong> lowerPoint - Starting point of the line, upperPoint - Ending point of the line, points - Array of points to filter.</p>
+    </div>
+</div>
+
+<!-- Function: upperhull -->
+<div class="function">
+    <div class="function-title">Function: upperhull(points, speed)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Initiates the process of constructing the upper hull of the set of points using a divide and conquer approach.</p>
+        <p><strong>Parameters:</strong> points - Array of point objects, speed - Visualization delay in milliseconds.</p>
+        <p><strong>Visualization:</strong> Constructs the upper hull with visual updates at each recursion step.</p>
+    </div>
+</div>
+
+<!-- Function: flipped -->
+<div class="function">
+    <div class="function-title">Function: flipped(points)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Reflects all points over both axes to assist in computing the lower hull as a reflection of the upper hull.</p>
+        <p><strong>Parameters:</strong> points - An array of point objects to be flipped.</p>
+    </div>
+</div>
+
+<!-- Function: kps -->
+<div class="function">
+    <div class="function-title">Function: kps(speed)</div>
+    <div class="description">
+        <p><strong>Description:</strong> Executes the Kirkpatrick–Seidel algorithm to compute the convex hull of a set of points. It uses a divide and conquer approach to find upper and lower hulls and combines them.</p>
+        <p><strong>Parameters:</strong> speed - The speed at which the algorithm's execution is visualized.</p>
+        <p><strong>Visualization:</strong> Shows the step-by-step construction of the convex hull with color-coded points and lines for clarity.</p>
+    </div>
+</div>
+
+
+   
+<h2> Comparing the Algorithms</h2>
+
+The Kirkpatrick–Seidel algorithm is best for huge datasets with millions of points, especially when the number of hull points is much smaller than the total points. It's most efficient when the difference between the number of hull points 'h' and 'log h' is significant.
+
+<h1></h1>
+Jarvis March excels when the hull has far fewer points than the total dataset. It's particularly effective for medium-sized datasets and outperforms others when 'h' is small.
+<h2></h2>
+In short, use Jarvis March for smaller or medium datasets or when the hull size is minimal. Kirkpatrick–Seidel is your go-to for very large datasets with a disproportionately small hull.
+
+<h2>Execution Time Observations</h2>
+<table>
+        <tr>
+            <th>n</th>
+            <th>h</th>
+            <th>nh</th>
+            <th>nlogh</th>
+            <th>nlogn</th>
+            <th>Jarvis</th>
+            <th>KPS</th>
+        </tr>
+        <tr>
+            <td>10000</td>
+            <td>30</td>
+            <td>300000</td>
+            <td>49068.90596</td>
+            <td>132877.1238</td>
+            <td>0.003</td>
+            <td>0.045</td>
+        </tr>
+        <tr>
+            <td>15000</td>
+            <td>2708</td>
+            <td>67700000</td>
+            <td>171045.1804</td>
+            <td>208090.1232</td>
+            <td>1.241</td>
+            <td>0.499</td>
+        </tr>
+        <tr>
+            <td>25000</td>
+            <td>3052</td>
+            <td>76300000</td>
+            <td>289388.4812</td>
+            <td>365241.0119</td>
+            <td>1.562</td>
+            <td>0.780</td>
+        </tr>
+        <tr>
+            <td>40000</td>
+            <td>3416</td>
+            <td>136640000</td>
+            <td>469523.6904</td>
+            <td>611508.4952</td>
+            <td>3.004</td>
+            <td>1.155</td>
+        </tr>
+        <tr>
+            <td>55000</td>
+            <td>3676</td>
+            <td>202180000</td>
+            <td>651415.6578</td>
+            <td>866092.9199</td>
+            <td>4.036</td>
+            <td>1.595</td>
+        </tr>
+        <!-- Additional rows as needed -->
+    </table>
+
+</body>
+</html>
