@@ -2,6 +2,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 var desc=document.getElementById('desc-container');
+var random=document.getElementById('generate');
 var points=[];
   var visualizationContainer = document.getElementById('visualization-container');
   var svgContainer = document.getElementById('svg-container');
@@ -18,6 +19,16 @@ var points=[];
       points.push({x,y});
       return dot;
     }
+random.addEventListener('click',function(event){
+      let np=document.getElementById('rand').value;
+      for(let i=0 ; i<np; i++)
+      {
+      let xr= Math.random()*1400;
+      let yr=Math.random()*400;
+      var dot = createDot(xr,yr);
+      visualizationContainer.appendChild(dot);
+      }
+    }); 
 function findLeftmostPoint(pts) {
       if (points.length === 0) {
           return null; 
