@@ -24,9 +24,9 @@ random.addEventListener('click',function(event){
       let np=document.getElementById('rand').value;
       for(let i=0 ; i<np; i++)
       {
-      let xr= Math.random()*1400;
+      let xr= Math.random()*1000;
       let yr=Math.random()*400;
-      var dot = createDot(xr,yr);
+      var dot = createDot(xr+100,yr+20);
       visualizationContainer.appendChild(dot);
       }
     }); 
