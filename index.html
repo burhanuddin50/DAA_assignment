@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convex Hull Algorithm Visualization</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1 id="heading">Convex Hull Algorithm Visualization</h1>
+  <div class="contain">
+  <div id="visualization-container">
+    <svg id="svg-container">
+      <!-- Lines will be drawn here -->
+    </svg>
+  </div>
+  </div>
+  <div class="ct">
+  <div class="contain">
+  <div id="algorithm-info">
+    <h2>Algorithm</h2>
+  </div>
+  
+  <div id="dropdown-menu">
+    <label for="algorithm-select">Select an algorithm:</label>
+    <select id="algorithm-select">
+      <option value="option1">Jarvis March Algorithm</option>
+      <option value="option2">Kirk Patrick Seidel Algorithm</option>
+    </select>
+  </div></div>
+  <button id="execute-button">Execute</button>
+  <div>Speed <input id="speed"></input></div>
+  <button id="clear-button">Clear</button>
+</div>
+<div class="desc">
+    <h2>Description</h2>
+    <div id="desc-container">
+        
+    </div>
+</div>
+</body>
+<script src="script.js"></script>
+</html>
