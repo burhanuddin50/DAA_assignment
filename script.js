@@ -69,6 +69,7 @@ clear.addEventListener('click', function(event) {
   lines.forEach(function(l){
     l.parentNode.removeChild(l);
   })
+  desc.innerText="Click on the visualization area to plot points, set execution speed, and select an algorithm (Jarvis March or Kirkpatrick–Seidel) before clicking 'Execute'.";
   });
 function connectDots(pts1,pts2,color) {
   x1=Math.abs(pts1.x);
@@ -88,6 +89,7 @@ function connectDots(pts1,pts2,color) {
   }
 function drawline(x)
 {
+  x=Math.abs(x);
   var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
   line.id="x1"+x+"y1"+"0"+"x2"+x+"y2"+"498"+"c"+"black";
   line.setAttribute("x1", x);
@@ -106,6 +108,7 @@ function disconnect(pts1,pts2,color)
 }
 function eraseline(x)
 {
+  x=Math.abs(x);
   let lineid="x1"+x+"y1"+"0"+"x2"+x+"y2"+"498"+"c"+"black";
    var lin=document.getElementById(lineid);
    svgContainer.removeChild(lin);
@@ -179,7 +182,7 @@ desc.innerText="Completed forming the convex hull. All points on the hull are ma
 
 
 async function bridge(points1, vertical_line,speed) {
-  desc.innerText = "Finding bridges within subsets of points. Bridges are indicated with lines.";
+  desc.innerText = "Preparing to find upper bridge";
   let points=[...points1];
   let candidates = [];
   if (points.length === 2) {
@@ -198,6 +201,7 @@ async function bridge(points1, vertical_line,speed) {
   }
    for(let i=0; i<pairs.length; i++)
    connectDots(pairs[i][0],pairs[i][1],"violet");
+  desc.innerText = "Randomly pairing up points and find slope of them";
   if (modify_s.length === 1) {
       candidates.push(modify_s[0]);
       //markpoint(modify_s[0],"green");
@@ -213,6 +217,7 @@ async function bridge(points1, vertical_line,speed) {
       }
   }
   await sleep(speed);
+  desc.innerText = "Calculate median of slopes";
   let median_index = Math.floor(slopes.length / 2) - (slopes.length % 2 === 0 ? 1 : 0);
   let slopes_dup=[...slopes];
   slopes_dup.sort();
@@ -226,7 +231,8 @@ async function bridge(points1, vertical_line,speed) {
   let right = max_set.reduce((max, point) => point.x > max.x ? point : max);
   //markpoint(left,"yellow");
   //markpoint(right,"yellow");
- // await sleep(2000);
+  await sleep(speed);
+  desc.innerText = "Eliminate points with respect to median of slope";
   for(let i=0; i<pairs.length; i++)
   disconnect(pairs[i][0],pairs[i][1],"violet");
   if (left.x <= vertical_line && right.x > vertical_line) {
@@ -263,6 +269,8 @@ async function bridge(points1, vertical_line,speed) {
   for(let i=0; i<candidates.length; i++)
   markpoint(candidates[i],"green");
   await sleep(speed);
+  desc.innerText = "Points marked with green are candidates for upper bridge";
+  await sleep(speed);
   for(let i=0; i<candidates.length; i++)
   markpoint(candidates[i],"blue");
   await sleep(speed);
@@ -282,7 +290,7 @@ function flippedy(points)
 }
 async function connect(lower ,upper ,points,speed)
 {
-  desc.innerText = "Connecting points to form a segment of the convex hull. Segments are being drawn.";
+  desc.innerText = "Using divide and conquer to find the upperhull";
   let npoints= points.filter( p=> p.x>=lower.x && p.x <=upper.x);
   let nnpoints=await eliminatebelow(lower, upper, npoints);
   let n=nnpoints.length;
@@ -307,6 +315,7 @@ async function connect(lower ,upper ,points,speed)
   let max_left=nnpoints[Math.floor(n/2)-1];
   let min_right=nnpoints[Math.floor(n/2)];
   if(n!=2){
+    desc.innerText = "Finding median of the points";
   drawline((max_left.x + min_right.x)/2);
   await sleep(speed);}
   let ans=await bridge([...nnpoints],(max_left.x + min_right.x)/2,speed); 
@@ -338,6 +347,7 @@ async function connect(lower ,upper ,points,speed)
       points_right.push(nnpoints[i]);
       unmarkpoint(nnpoints[i]);
   }
+  desc.innerText = "Eliminating points inside the quadilateral";
   if(n!=2)
   await sleep(speed);
   return (await connect(lower, ans[0], [...points_left],speed)).concat(await connect(ans[1],upper, [...points_right],speed));
@@ -375,6 +385,7 @@ async function upperhull(points,speed)
     markpoint(lower,"red");
     markpoint(upper,"red");
     await sleep(speed);
+    desc.innerText = "Points most left and right are highlighted with red.";
     return connect(lower,upper,points,speed);
 }
 function flipped(points)
@@ -399,7 +410,6 @@ async function kps(speed)
     desc.innerText = "Initializing Kirkpatrick–Seidel Algorithm. Starting process to find the convex hull.";
     let npoints=flippedy(points);
     desc.innerText = "Computing the upper hull. Dividing points and recursively finding upper bridges.";
-    desc.innerText = "Points being considered are highlighted.";
     let upper=await upperhull(npoints,speed);
     desc.innerText = "Computing the lower hull by re-flipping the points. Considering points for the lower hull.";
     let lower=flipped(await upperhull(flipped([...npoints]),speed));
