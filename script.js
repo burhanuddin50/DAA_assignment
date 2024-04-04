@@ -176,7 +176,7 @@ async function jarvis(speed)
 markpoint(points[leftmostpoint],"red");
 desc.innerText="Completed forming the convex hull. All points on the hull are marked in red, with the hull boundary outlined in blue";
 }
-desc.innerText = "Initializing Kirkpatrick–Seidel Algorithm. Starting process to find the convex hull.";
+
 
 async function bridge(points1, vertical_line,speed) {
   desc.innerText = "Finding bridges within subsets of points. Bridges are indicated with lines.";
@@ -396,6 +396,7 @@ async function kps(speed)
     //   {x: 448, y: 233},
     //   {x: 473, y: 226},
     //   {x: 545, y: 311}]; 
+    desc.innerText = "Initializing Kirkpatrick–Seidel Algorithm. Starting process to find the convex hull.";
     let npoints=flippedy(points);
     desc.innerText = "Computing the upper hull. Dividing points and recursively finding upper bridges.";
     desc.innerText = "Points being considered are highlighted.";
